@@ -1,0 +1,14 @@
+@font-face {
+    font-family: 'Montserrat-Medium';
+    src: url('../fonts/Montserrat/static/Montserrat-Medium.ttf');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/Montserrat/static/Montserrat-Regular.ttf');
+}
+
+body {
+    font-family: 'Montserrat-Medium', sans-serif;
+    background-color: #fcfcfc;
+}
