@@ -95,9 +95,6 @@ class InsuranceProviderController extends Controller
             ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computation_rates.insurance_coverage_id')
             ->get();
 
-            // DD($computationRates);
-
-
 
             return view('form_qoutation', compact(
                 'ownDamageComputations'

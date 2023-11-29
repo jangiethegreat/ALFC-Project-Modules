@@ -429,25 +429,25 @@
     {{-- Button Addition Function --}}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var originalInputs = document.getElementById('initialInputs').cloneNode(true);
-            var addedFieldContainers = [];
+            let originalInputs = document.getElementById('initialInputs').cloneNode(true);
+            let addedFieldContainers = [];
 
             document.getElementById('addFieldBtn').addEventListener('click', function () {
-                var newFieldsContainer = document.createElement('div');
+                let newFieldsContainer = document.createElement('div');
                 newFieldsContainer.className = 'row row-space';
 
-                var newField1 = document.createElement('div');
+                let newField1 = document.createElement('div');
                 newField1.className = 'col-6 col-sm-3 col-md-6 mb-3 d-flex align-items-center justify-content-center';
                 newField1.innerHTML = '<input type="text" class="form-control custom-input" >';
 
-                var newField2 = document.createElement('div');
+                let newField2 = document.createElement('div');
                 newField2.className = 'col-6 col-sm-3 col-md-6 mb-3 d-flex align-items-center justify-content-center';
                 newField2.innerHTML = '<input type="text" class="form-control custom-input" >';
 
                 newFieldsContainer.appendChild(newField1);
                 newFieldsContainer.appendChild(newField2);
 
-                var addButton = document.getElementById('addFieldBtn');
+                let addButton = document.getElementById('addFieldBtn');
                 addButton.parentNode.insertBefore(newFieldsContainer, addButton.parentNode.firstChild);
 
                 addedFieldContainers.push(newFieldsContainer);
@@ -456,19 +456,19 @@
 
             document.getElementById('deleteFieldBtn').addEventListener('click', function () {
                 if (addedFieldContainers.length > 0) {
-                    var lastAddedContainer = addedFieldContainers.pop();
+                    let lastAddedContainer = addedFieldContainers.pop();
                     lastAddedContainer.remove();
                     updateDeleteButton();
                 } else {
                     // When all added fields are deleted, restore the original inputs
-                    var dynamicFieldsContainer = document.getElementById('dynamicFieldsContainer');
+                    let dynamicFieldsContainer = document.getElementById('dynamicFieldsContainer');
                     dynamicFieldsContainer.innerHTML = '';
                     dynamicFieldsContainer.appendChild(originalInputs.cloneNode(true));
                 }
             });
 
             function updateDeleteButton() {
-                var deleteButton = document.getElementById('deleteFieldBtn');
+                let deleteButton = document.getElementById('deleteFieldBtn');
                 deleteButton.disabled = addedFieldContainers.length === 0;
             }
         });
@@ -482,7 +482,6 @@
         let ownDamageSetRate = @json($ownDamageComputations->pluck('ownDamageSetRate')->first());
         let ownDamageRate = ownDamageSetRate * 100;
 
-
         function validateOwnDamageLimit(input) {
             const numericValue = Number(input.value.replace(/[^\d.]/g, ''));
             const formattedValue = numericValue.toLocaleString('en-US');
@@ -490,8 +489,10 @@
 
             if (numericValue > ownDamageSetLimit) {
                 input.classList.add('is-invalid');
+                // Show an error message for rate exceeding the value of formattedOwnDamageLimit
                 document.querySelector('.odt-invalid-inputs').innerText = `Please enter a value less than or equal to ${formattedOwnDamageLimit}`;
             } else {
+                //Remove error message after clearing the inputted value
                 input.classList.remove('is-invalid');
                 document.querySelector('.odt-invalid-inputs').innerText = '';
             }
@@ -501,16 +502,17 @@
         }
 
         function validateOwnDamageRate(input) {
-            var value = input.value.trim(); // Remove leading/trailing spaces
-            var parsedValue = parseFloat(value);
+            let value = input.value.trim(); // Remove leading/trailing spaces
+            let parsedValue = parseFloat(value);
             const formattedOwnDamageRate = parseFloat(ownDamageRate).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
             if (!isNaN(parsedValue)) {
                 if (parsedValue > formattedOwnDamageRate) {
                     input.classList.add('is-invalid');
-                    // Show an error message for rate exceeding 100
+                    // Show an error message for rate exceeding the value of formattedOwnDamageRate
                     document.querySelector('.odtrate-invalid-inputs').innerText = 'Please enter a value less than or equal to ' + formattedOwnDamageRate + '%';
                 } else {
+                    //Remove error message after clearing the inputted value
                     input.classList.remove('is-invalid');
                     document.querySelector('.odtrate-invalid-inputs').innerText = '';
                 }
@@ -522,12 +524,12 @@
         }
 
         function convertToDecimalPercentageODT() {
-            var input = document.getElementById('odt_rate');
-            var value = input.value.trim(); // Remove leading/trailing spaces
-            var parsedValue = parseFloat(value);
+            let input = document.getElementById('odt_rate');
+            let value = input.value.trim(); // Remove leading/trailing spaces
+            let parsedValue = parseFloat(value);
 
             if (!isNaN(parsedValue)) {
-                var decimalValue = parsedValue / 100;
+                let decimalValue = parsedValue / 100;
                 input.value = parsedValue + '%';
                 decimalValue.toFixed(4);
                 calculatePremiumDueODT(decimalValue);
@@ -535,10 +537,10 @@
         }
 
         function calculatePremiumDueODT(decimalValue) {
-            var limit = parseFloat(document.getElementById('odt_limit').value.replace(/\D/g, ''));
+            let limit = parseFloat(document.getElementById('odt_limit').value.replace(/\D/g, ''));
 
             if (!isNaN(limit) && !isNaN(decimalValue)) {
-                var premiumDue = (limit * decimalValue).toFixed(2);
+                let premiumDue = (limit * decimalValue).toFixed(2);
                 document.getElementById('odt_premium_due').value = parseFloat(premiumDue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             }
         }
@@ -546,8 +548,8 @@
         document.getElementById('odt_rate').addEventListener('keyup', function (event) {
             if (event.key === 'Enter') {
                 validateOwnDamageRate(this); // Check the rate validity
-                var value = this.value.trim(); // Remove leading/trailing spaces
-                var parsedValue = parseFloat(value);
+                let value = this.value.trim(); // Remove leading/trailing spaces
+                let parsedValue = parseFloat(value);
                 if (!isNaN(parsedValue) && parsedValue <= ownDamageRate) {
                     convertToDecimalPercentageODT();
                 }
@@ -565,8 +567,8 @@
         let aogSetLimit = 300000.000000000;
 
         function validateAogLimit(input) {
-            var value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
-            var formattedValue = Number(value).toLocaleString('en-US'); // Format to have commas
+            let value = input.value.replace(/\D/g, ''); // Remove non-numeric characters
+            let formattedValue = Number(value).toLocaleString('en-US'); // Format to have commas
 
 
                 if (value > aogSetLimit) {
@@ -586,12 +588,12 @@
             });
 
             function convertToDecimalPercentage() {
-                var input = document.getElementById('aog_rate');
-                var value = input.value.trim(); // Remove leading/trailing spaces
-                var parsedValue = parseFloat(value);
+                let input = document.getElementById('aog_rate');
+                let value = input.value.trim(); // Remove leading/trailing spaces
+                let parsedValue = parseFloat(value);
 
                 if (!isNaN(parsedValue)) {
-                    var decimalValue = parsedValue / 100;
+                    let decimalValue = parsedValue / 100;
                     input.value = parsedValue + '%';
                     decimalValue.toFixed(4);
                     calculatePremiumDue(decimalValue);
@@ -599,10 +601,10 @@
             }
 
             function calculatePremiumDue(decimalValue) {
-                var limit = parseFloat(document.getElementById('aog_limit').value.replace(/\D/g, ''));
+                let limit = parseFloat(document.getElementById('aog_limit').value.replace(/\D/g, ''));
 
                 if (!isNaN(limit) && !isNaN(decimalValue)) {
-                    var premiumDue = (limit * decimalValue).toFixed(4);
+                    let premiumDue = (limit * decimalValue).toFixed(4);
                     document.getElementById('aog_premium_due').value = premiumDue;
                 }
             }
