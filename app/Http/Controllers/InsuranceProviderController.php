@@ -86,8 +86,8 @@ class InsuranceProviderController extends Controller
                 'insurance_coverages.coverage_name',
                 'insurance_computation_rates.set_limit as ownDamageSetLimit',
                 'insurance_computation_rates.set_rate as ownDamageSetRate',
-                'insurance_computation_rates.provider_net_limit',
-                'insurance_computation_rates.provider_net_rate',
+                'insurance_computation_rates.provider_net_limit as ownDamageProviderLimit',
+                'insurance_computation_rates.provider_net_rate as ownDamageProviderRate',
 
             )
             ->where('provider_category_id', $providerCategory->id)
@@ -96,8 +96,65 @@ class InsuranceProviderController extends Controller
             ->get();
 
 
+
+            $bodilyInjuryComputations = InsuranceComputationRate::select(
+                'insurance_coverages.coverage_name',
+                'insurance_computation_rates.set_limit as bodilyInjurySetLimit',
+                'insurance_computation_rates.set_rate as bodilyInjurySetRate',
+                'insurance_computation_rates.provider_net_limit as bodilyInjuryProviderLimit',
+                'insurance_computation_rates.provider_net_rate as bodilyInjuryProviderRate',
+
+            )
+            ->where('provider_category_id', $providerCategory->id)
+            ->where('insurance_coverages.coverage_name', '=', 'BODILY INJURY' )
+            ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computation_rates.insurance_coverage_id')
+            ->get();
+
+
+            $propertyDamageComputations = InsuranceComputationRate::select(
+                'insurance_coverages.coverage_name',
+                'insurance_computation_rates.set_limit as propertyDamageSetLimit',
+                'insurance_computation_rates.set_rate as propertyDamageSetRate',
+                'insurance_computation_rates.provider_net_limit as propertyDamageLimit',
+                'insurance_computation_rates.provider_net_rate as propertyDamageProviderRate',
+            )
+
+            ->where('provider_category_id', $providerCategory->id)
+            ->where('insurance_coverages.coverage_name', '=', 'PROPERTY DAMAGE' )
+            ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computation_rates.insurance_coverage_id')
+            ->get();
+
+
+            $autoPaComputations = InsuranceComputationRate::select(
+                'insurance_coverages.coverage_name',
+                'insurance_computation_rates.set_limit as autoPaSetLimit',
+            )
+            ->where('provider_category_id', $providerCategory->id)
+            ->where('insurance_coverages.coverage_name', '=', 'AUTO-PA- 5 SEATS' )
+            ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computation_rates.insurance_coverage_id')
+            ->get();
+
+            $aogComputations = InsuranceComputationRate::select(
+                'insurance_coverages.coverage_name',
+                'insurance_computation_rates.set_limit as aogSetLimit',
+                'insurance_computation_rates.set_rate as aogSetRate',
+                'insurance_computation_rates.provider_net_limit as aogProviderLimit',
+                'insurance_computation_rates.provider_net_rate as aogProviderRate',
+
+            )
+            ->where('provider_category_id', $providerCategory->id)
+            ->where('insurance_coverages.coverage_name', '=', 'AOG' )
+            ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computation_rates.insurance_coverage_id')
+            ->get();
+
+            // DD($autoPaComputations);
+
             return view('form_qoutation', compact(
-                'ownDamageComputations'
+                'ownDamageComputations',
+                'bodilyInjuryComputations',
+                'propertyDamageComputations',
+                'autoPaComputations',
+                'aogComputations'
             ));
 
     }
