@@ -21,9 +21,11 @@
         margin-top: 0.25rem;
         font-size: 80%;
         color: #dc3545;
+        text-align: center;
     }
 
     .custom-input{
+        text-align: center;
         height: 38px;
         background: #E4E4E4;
     }
@@ -60,10 +62,10 @@
 </style>
 
 
-<div class="container mt-5" >
+<div class="container mt-5 mb-5" >
         <div class="row justify-content-center" >
             <div class="col-md-10">
-                <div class="card" >
+                <div class="card pb-5" >
                     <div class="card-body">
                         <h2 class="agent-header"> Sedan Quotation Form</h2>
 
@@ -75,7 +77,7 @@
                         <div class="row row-space">
                             <div class="col-md-12 mb-3">
                                 <label class="input-label label">Insured’s Full Name</label>
-                                <input type="text" id="insured_full_name" name="insured_full_name" class="form-control custom-input" >
+                                <input type="text" id="insured_full_name" name="insured_full_name" class="form-control " style=" background: #E4E4E4;" >
                                 @error('insured_full_name')
                                     <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
@@ -223,8 +225,7 @@
 
                             <div class="col-6 col-sm-3 col-md-3  mb-3 d-flex flex-column align-items-center">
                                 <label class="text-card input-label label hidden-mobile" style="visibility: hidden;">LIMIT</label>
-                                <input type="text" id="aps_limit" name="aps_limit" class="form-control custom-input" value="{{ $autoPaComputations->first()->autoPaSetLimit }}" >
-
+                                <input type="text" id="aps_limit" name="aps_limit" class="form-control custom-input" value="{{ $autoPaComputations->isNotEmpty() ? $autoPaComputations->first()->autoPaSetLimit ?? '' : '' }}" >
                             </div>
 
                             <div class="col-6 col-sm-3 col-md-3  mb-3 d-flex flex-column align-items-center">
@@ -352,39 +353,11 @@
                         </div>
 
                         <div class="row">
-                            <!-- First card container for dynamic fields -->
-                            <div class="col-md-6">
-                                <div class="card border-0">
-                                    <div class="card-body" id="dynamicFieldsContainer">
-                                        <div class="row row-space" id="initialInputs">
-                                            <div class="col-6 col-sm-3 col-md-6 d-flex flex-column align-items-center">
-                                                <label class="input-label label">Deductions</label>
-                                                <input type="text" class="form-control custom-input" >
-                                            </div>
-                                            <div class="col-6 col-sm-3 col-md-6 d-flex flex-column align-items-center">
-                                                <label class="input-label label">Amount</label>
-                                                <input type="text" class="form-control custom-input" >
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-md-12 text-right">
-                                                <button class="btn btn-danger" id="addFieldBtn">Add</button>
-                                                <button class="btn btn-secondary ml-2" id="deleteFieldBtn" style="background-color: transparent; border: none; color: red;" onclick="this.blur()" disabled>
-                                                    Delete
-                                                </button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Second card container for label and form -->
                             <div class="col-md-6">
                                 <div class="card border-0">
                                     <div class="card-body">
                                         <div class="row row-space">
-                                            <div class="col-6 col-sm-3 col-md-6 mt-3 d-flex align-items-center justify-content-center">
+                                            <div class="col-6 col-sm-3 col-md-6 mt-3 d-flex align-items-center justify-content-start">
                                                 <label class="text-card input-label label">Total Expenses</label>
                                             </div>
                                             <div class="col-6 col-sm-3 col-md-6 mb-3 d-flex flex-column align-items-center">
@@ -394,7 +367,7 @@
                                             </div>
                                         </div>
                                         <div class="row row-space">
-                                            <div class="col-6 col-sm-3 col-md-6 mt-3 d-flex align-items-center justify-content-center">
+                                            <div class="col-6 col-sm-3 col-md-6 mt-3 d-flex justify-content-start">
                                                 <label class="text-card input-label label">VAT</label>
                                             </div>
                                             <div class="col-6 col-sm-3 col-md-6 mb-3 d-flex flex-column align-items-center">
@@ -404,7 +377,7 @@
                                             </div>
                                         </div>
                                         <div class="row row-space">
-                                            <div class="col-6 col-sm-3 col-md-6 mt-3 d-flex align-items-center justify-content-center">
+                                            <div class="col-6 col-sm-3 col-md-6 mt-3 d-flex justify-content-start">
                                                 <label class="text-card input-label label">Sales Credit</label>
                                             </div>
                                             <div class="col-6 col-sm-3 col-md-6 mb-3 d-flex flex-column align-items-center">
@@ -414,7 +387,7 @@
                                             </div>
                                         </div>
                                         <div class="row row-space">
-                                            <div class="col-6 col-sm-3 col-md-6 mt-3 d-flex align-items-center justify-content-center">
+                                            <div class="col-6 col-sm-3 col-md-6 mt-3 d-flex justify-content-start">
                                                 <label class="text-card input-label label">Sales Credit %</label>
                                             </div>
                                             <div class="col-6 col-sm-3 col-md-6 mb-3 d-flex flex-column align-items-center">
@@ -426,6 +399,58 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                            <div class="card border-0">
+                                                <div class="card-body" id="dynamicFieldsContainer">
+                                                    <div class="row row-space" id="initialInputs">
+                                                        <div class="col-6 col-sm-3 col-md-6 d-flex flex-column align-items-center">
+                                                            <label class="input-label label">Deductions</label>
+                                                            <input type="text" class="form-control custom-input" >
+                                                        </div>
+                                                        <div class="col-6 col-sm-3 col-md-6 d-flex flex-column align-items-center">
+                                                            <label class="input-label label">Amount</label>
+                                                            <input type="text" class="form-control custom-input" >
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mt-3">
+                                                        <div class="col-md-12 text-right">
+
+                                                            <button class="btn btn-secondary ml-2" id="deleteFieldBtn" style="background-color: transparent; border: none; color: #978A8A; font-size:10px;" onclick="this.blur()" disabled>
+                                                            REMOVE
+                                                            </button>
+                                                            <button class="btn btn-danger" id="addFieldBtn" style="background-color: transparent; border: none; color: #B60000;font-size:10px; ">ADD FIELD</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Proceed with Quotation Submission</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body ">
+                                        Please note that all entered information will be subjected to a thorough validation process before final approval is granted. Once you submit the details, they will be forwarded for review and subsequent approval. Kindly ensure the accuracy and completeness of the information provided, as once the submission is confirmed, no further modifications or edits can be made
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-secondary ml-2" data-dismiss="modal"  style="background-color: transparent; border: none; color: red;" >
+                                                Cancel
+                                            </button>
+                                            <button type="button" class="btn btn-danger" style="border-radius: 20px;" >Proceed</button>
+                                            <!-- Add another button here if needed -->
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
 
                     </div>
@@ -433,6 +458,31 @@
             </div>
         </div>
     </div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 mb-5 ">
+            <div style="display: flex; justify-content: flex-end;  margin-bottom:10px;">
+
+                        <button style="border-radius: 18px; background: transparent; width: 203px; height: 39px; flex-shrink: 0; border: none; ;">
+                            <span style="color: #B40C0C; font-family: Montserrat; font-size: 15px; font-style: normal; font-weight: 700; line-height: normal;">
+                                Cancel
+                            </span>
+                        </button>
+
+                        <button style="border-radius: 18px; background: #980000; width: 203px; height: 39px; flex-shrink: 0; border: none; margin-left: 10px;" data-toggle="modal" data-target="#exampleModal">
+                            <span style="color: #FFF; font-family: Montserrat; font-size: 15px; font-style: normal; font-weight: 700; line-height: normal;">
+                                Continue
+                            </span>
+                        </button>
+
+                    </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
 
 
     {{-- Button Addition Function --}}
@@ -674,20 +724,27 @@
         });
     </script>
 
+    {{-- AUTO PA Function --}}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let apsLimit = document.getElementById("aps_limit");
             let seatingCapacity = document.getElementById("aps_seating_capacity");
             let apsPremiumDueInput = document.getElementById("aps_premium_due");
 
-            // Formatting the apsLimit value and updating the input field with the formatted result
-            let formattedApsLimit = parseFloat(apsLimit.value).toLocaleString('en-US', {
-                style: 'decimal',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 2
-            });
+            if (apsLimit.value !== '') {
 
-            apsLimit.value = formattedApsLimit;
+                // Formatting the apsLimit value and updating the input field with the formatted result
+                let formattedApsLimit = parseFloat(apsLimit.value).toLocaleString('en-US', {
+                    style: 'decimal',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2
+                });
+
+                apsLimit.value = formattedApsLimit;
+
+            }
+
+
 
             function calculateApsPremiumDue() {
                 let limit = parseFloat(apsLimit.value.replace(/\D/g, ''));
@@ -702,9 +759,6 @@
             seatingCapacity.addEventListener('change', calculateApsPremiumDue);
         });
     </script>
-
-
-
 
 
     {{-- AOG Functions --}}
