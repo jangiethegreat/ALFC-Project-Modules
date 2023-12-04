@@ -24,8 +24,8 @@ Route::get('/landing-page', [ViewController::class, 'landingPage']);
 
 // Route::get('/providers', [InsuranceProviderController::class, 'index']);
 Route::get('/providers', [InsuranceProviderController::class, 'getProviders'])->name('insurance.providers.index');
-Route::get('/categories/{providerId}', [InsuranceProviderController::class, 'getCategories'])->name('insurance.categories');
-Route::get('/computation-rates/{providerId}/{categoryId}', [InsuranceProviderController::class, 'getComputationRates'])->name('insurance.computation_rates');
+Route::get('/products/{providerId}', [InsuranceProviderController::class, 'getProducts'])->name('insurance.products');
+Route::get('/computation-rates/{providerId}/{productId}', [InsuranceProviderController::class, 'getComputationRates'])->name('insurance.computation_rates');
 
 
 
@@ -34,7 +34,7 @@ Route::get('/computation-rates/{providerId}/{categoryId}', [InsuranceProviderCon
 
 
 
-Route::get('/partnered-insurance-categories', [QoutationController::class, 'providerCategory'])->name('partnered.categories');
+Route::get('/partnered-insurance-products', [QoutationController::class, 'providerCategory'])->name('partnered.products');
 
 Route::get('/qoutation', [QoutationController::class, 'qoutation'])->name('post.qoutation');
 

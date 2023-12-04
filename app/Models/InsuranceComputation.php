@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class InsuranceComputationRate extends Model
+class InsuranceComputation extends Model
 {
     use HasFactory;
-    public $table = 'insurance_computation_rates';
+    public $table = 'insurance_computations';
 
     protected $fillable = [
-        'provider_category_id',
+        'provider_product_id',
         'insurance_coverage_id',
         'set_limit',
         'set_rate',

@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -13,10 +14,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('insurance_categories', function (Blueprint $table) {
+        Schema::create('provider_products', function (Blueprint $table) {
             $table->id();
-            $table->string('category_name');
-            $table->string('category_type')->nullable();
+            $table->foreignId('insurance_provider_id')->constrained('insurance_providers');
+            $table->foreignId('insurance_product_id')->constrained('insurance_products');
         });
     }
 
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('insurance_categories');
+        Schema::dropIfExists('provider_products');
     }
 };

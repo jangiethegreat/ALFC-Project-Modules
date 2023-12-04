@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('qoutations', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('quotation_id');
-            $table->foreignId('computation_rate_id')->constrained('provider_categories');
+            $table->foreignId('computation_rate_id')->constrained('provider_products');
             $table->decimal('insured_limit', 20, 9);
             $table->decimal('insured_rate', 20, 9);
             $table->decimal('insured_premium_rate', 20, 9);

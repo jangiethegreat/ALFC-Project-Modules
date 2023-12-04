@@ -7,7 +7,7 @@
     <div id="providers-list">
         <!-- Placeholder for the list of insurance providers -->
         @foreach ($providers as $provider)
-            <a href="{{ route('insurance.categories', ['providerId' => $provider->id]) }}">{{ $provider->provider_name }}</a><br>
+            <a href="{{ route('insurance.products', ['providerId' => $provider->id]) }}">{{ $provider->provider_name }}</a><br>
         @endforeach
     </div>
 

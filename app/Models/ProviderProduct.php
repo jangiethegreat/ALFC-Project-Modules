@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProviderCategory extends Model
+class ProviderProduct extends Model
 {
     use HasFactory;
-    public $table = 'provider_categories';
+    public $table = 'provider_products';
 
     protected $fillable = [
         'insurance_provider_id',
-        'insurance_category_id'
+        'insurance_product_id'
     ];
 
     public $timestamp = false;

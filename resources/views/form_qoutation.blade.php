@@ -56,6 +56,11 @@
         text-align: center;
     }
 
+    .form-control.custom-input {
+        font-size: 13px;
+    }
+
+
     .custom-input{
         text-align: center;
         height: 38px;
@@ -144,23 +149,32 @@
                             <div class="title-header">
                                 <p class="title-details mb-1 mt-sm-2 mt-md-5">Insured Details</p>
                                 <p class="title-desc mt-1">Please input the information of the insured in the designated fields below.</p>
-                                <input type="text" name="datefilter" value="" />
                             </div>
 
                             <div class="row row-space">
-                                <div class="col-md-12 mb-3">
+                                <div class="col-md-9 mb-3">
                                     <label class="input-label label">Insured’s Full Name</label>
-                                    <input type="text" id="insured_full_name" name="insured_full_name" class="form-control " style=" background: #E4E4E4;" >
+                                    <input type="text" id="insured_full_name" name="insured_full_name" class="form-control custom-input" style="text-align: left;" >
                                     @error('insured_full_name')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
+                                </div>
+
+                                <div class="col-sm-3 col-md-3  mb-3 ">
+                                    <label class="input-label label">Effectivity Date</label>
+                                    <select id="effectivity_date" name="effectivity_date" class="form-control custom-input" style="text-align: left; font-size: 13px;">
+                                        <option disabled="disabled" selected="selected">Select Effectivity Date</option>
+                                        <option value="6 Month">6 Month</option>
+                                        <option value="1 Year">1 Year</option>
+                                        <option value="2 Year">2 Year</option>
+                                    </select>
                                 </div>
                             </div>
 
                             <div class="row row-space">
                                 <div class="col-md-3 mb-3">
                                     <label class="input-label label">Car Classification</label>
-                                    <input type="text" id="car_classification" name="car_classification" class="form-control custom-input" >
+                                    <input type="text" id="car_classification" name="car_classification" class="form-control custom-input" style="text-align: left;">
                                     @error('car_classification')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
@@ -168,7 +182,7 @@
 
                                 <div class="col-md-3 mb-3">
                                     <label class="input-label label">Car Category</label>
-                                    <input type="text" id="car_category" name="car_category" class="form-control custom-input" >
+                                    <input type="text" id="car_category" name="car_category" class="form-control custom-input" style="text-align: left;">
                                     @error('car_category')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
@@ -176,7 +190,7 @@
 
                                 <div class="col-md-3 mb-3">
                                     <label class="input-label label">Unit Model</label>
-                                    <input type="text" id="unit_model" name="unit_model" class="form-control custom-input" >
+                                    <input type="text" id="unit_model" name="unit_model" class="form-control custom-input" style="text-align: left;">
                                     @error('unit_model')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
@@ -184,7 +198,7 @@
 
                                 <div class="col-md-3 mb-3">
                                     <label class="input-label label">Plate No.</label>
-                                    <input type="text" id="plate_no" name="plate_no" class="form-control custom-input" >
+                                    <input type="text" id="plate_no" name="plate_no" class="form-control custom-input" style="text-align: left;">
                                     @error('plate_no')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                     @enderror
@@ -233,8 +247,8 @@
 
                                 <div class="col-6 col-sm-3 col-md-3  mb-3 d-flex flex-column align-items-center">
                                     <label class="text-card input-label label hidden-mobile" style="visibility: hidden;">LIMIT</label>
-                                    <select id="bi_limit" name="bi_limit" class="form-control custom-input">
-                                        <option disabled="disabled" selected="selected">Select Limit</option>
+                                    <select id="bi_limit" name="bi_limit" class="form-control custom-input" style="text-align: left; font-size: 13px;">
+                                        <option disabled="disabled" selected="selected" >Select Limit</option>
                                         @foreach ($bodilyInjuryComputations as $computation)
                                             <option value="{{ $computation->bodilyInjurySetLimit }}"
                                                 data-rate="{{ $computation->bodilyInjurySetRate }}"
@@ -266,7 +280,7 @@
 
                                 <div class="col-6 col-sm-3 col-md-3  mb-3 d-flex flex-column align-items-center">
                                     <label class="text-card input-label label hidden-mobile" style="visibility: hidden;">LIMIT</label>
-                                    <select id="pd_limit" name="pd_limit" class="form-control custom-input">
+                                    <select id="pd_limit" name="pd_limit" class="form-control custom-input" style="text-align: left; font-size: 13px;">
                                         <option disabled="disabled" selected="selected">Select Limit</option>
                                         @foreach ($propertyDamageComputations as $propertyDamageComputation)
                                             <option value="{{
@@ -557,18 +571,7 @@
     </div>
 </div>
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        flatpickr("#datepicker", {
-            dateFormat: "Y-m-d",
-            maxDate: "today", // Restrict selection to dates before today
-        });
 
-        document.getElementById("datepickerButton").addEventListener("click", function () {
-            document.getElementById("datepicker").flatpickr.open();
-        });
-    });
-    </script>
 
 
 
@@ -645,6 +648,7 @@
                 maximumFractionDigits: 2
             });
 
+
             //Check if numericValue is greater than ownDamageSetLimit
             if (numericValue > ownDamageSetLimit) {
 
@@ -654,17 +658,16 @@
                 // Show an error message for rate exceeding the value of formattedOwnDamageLimit
                 document.querySelector('.odt-invalid-inputs').innerText = `Please enter a value less than or equal to ${formattedOwnDamageLimit}`;
 
-            } else {
+            }
+
+            else {
 
                 //Remove error message after clearing the inputted value
                 input.classList.remove('is-invalid');
 
                 // Remove the error message for rate exceeding the value of formattedOwnDamageLimit
                 document.querySelector('.odt-invalid-inputs').innerText = '';
-
             }
-
-            // Update input value with formatted value
             input.value = formattedValue;
         }
 
@@ -1016,6 +1019,7 @@
 
         }
     </script>
+
     <script>
 
         function calculateLGT()
@@ -1044,6 +1048,10 @@
             const totalLgt = parseFloat(document.getElementById('lgt').value.replace(/[^\d.]/g, '')) || 0;
             const totalRap = parseFloat(document.getElementById('rap').value.replace(/[^\d.]/g, '')) || 0;
 
+            // const totalDst = parseFloat(document.getElementById('dst').split(',').join(''));
+
+
+
             totalGrossPremium = totalPremiumDue +  totalDst + totalVat + totalLgt + totalRap;
 
             document.getElementById('gross_premium').value = totalGrossPremium.toLocaleString('en-US', {
@@ -1068,6 +1076,8 @@
             const totalDiscount = parseInt(document.getElementById('discount').value);
 
             totalvalueNet = totalGrossPremium - totalDiscount ;
+
+            // document.querySelector('net').
 
             document.getElementById('net').value = totalvalueNet.toLocaleString('en-US', {
                 minimumFractionDigits: 2,

@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\InsuranceProvider;
-use App\Models\InsuranceCategory;
+use App\Models\InsuranceProduct;
 use App\Models\InsuranceCoverage;
-use App\Models\InsuranceComputationRate;
+use App\Models\InsuranceComputation;
 use Illuminate\Support\Facades\Cache;
 
 use DB;
@@ -25,43 +25,43 @@ class InsuranceProviderController extends Controller
             return view('providers', ['providers' => $providers]);
     }
 
-    public function getCategories($providerId) {
+    public function getProducts($providerId) {
 
-        $categories = DB::table('insurance_categories')
-        ->select('insurance_categories.id', 'insurance_categories.category_name') // Select both id and category_name
-        ->whereIn('insurance_categories.id', function ($query) use ($providerId) {
+        $products = DB::table('insurance_products')
+        ->select('insurance_products.id', 'insurance_products.product_name') // Select both id and product_name
+        ->whereIn('insurance_products.id', function ($query) use ($providerId) {
 
-            $query->select('provider_categories.insurance_category_id')
-                ->from('provider_categories')
-                ->join('insurance_providers', 'insurance_providers.id', '=', 'provider_categories.insurance_provider_id')
-                ->join('insurance_categories', 'insurance_categories.id', '=', 'provider_categories.insurance_category_id')
-                ->where('provider_categories.insurance_provider_id', $providerId);
+            $query->select('provider_products.insurance_product_id')
+                ->from('provider_products')
+                ->join('insurance_providers', 'insurance_providers.id', '=', 'provider_products.insurance_provider_id')
+                ->join('insurance_products', 'insurance_products.id', '=', 'provider_products.insurance_product_id')
+                ->where('provider_products.insurance_provider_id', $providerId);
 
         })
         ->get();
 
 
-        // dd($categories);
+        // dd($products);
 
         // Pass the $insurance_computation_rate data to a view to display
-        return view('categories', compact('categories','providerId'));
+        return view('products', compact('products','providerId'));
     }
 
-    // public function getComputationRates($providerId, $categoryId) {
-    //     $providerCategory = DB::table('provider_categories')
+    // public function getComputationRates($providerId, $productId) {
+    //     $providerProduct = DB::table('provider_products')
     //         ->where('insurance_provider_id', $providerId)
-    //         ->where('insurance_category_id', $categoryId)
+    //         ->where('insurance_product_id', $productId)
     //         ->first();
 
-    //     if ($providerCategory) {
+    //     if ($providerProduct) {
 
-    //         $computationRates = InsuranceComputationRate::select(
-    //             'insurance_computation_rates.*',
+    //         $computationRates = InsuranceComputation::select(
+    //             'insurance_computations.*',
     //             'insurance_coverages.coverage_name', // Select coverage_name field
-    //             'insurance_computation_rates.set_rate'
+    //             'insurance_computations.set_rate'
     //         )
-    //         ->where('provider_category_id', $providerCategory->id)
-    //         ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computation_rates.insurance_coverage_id')
+    //         ->where('provider_product_id', $providerProduct->id)
+    //         ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computations.insurance_coverage_id')
     //         ->get();
 
     //         $groupedRates = $computationRates->groupBy('coverage_name');
@@ -71,80 +71,80 @@ class InsuranceProviderController extends Controller
     //         return view('form_qoutation', compact('computationRates','groupedRates'));
     //     } else {
     //         // Handle case when no computation rates are found for the selected category and provider
-    //         return redirect()->route('insurance.categories', ['providerId' => $providerId])->with('error', 'No computation rates found for this category and provider.');
+    //         return redirect()->route('insurance.products', ['providerId' => $providerId])->with('error', 'No computation rates found for this category and provider.');
     //     }
     // }
 
-    public function getComputationRates($providerId, $categoryId) {
+    public function getComputationRates($providerId, $productId) {
 
-            $providerCategory = DB::table('provider_categories')
+            $providerProduct = DB::table('provider_products')
             ->where('insurance_provider_id', $providerId)
-            ->where('insurance_category_id', $categoryId)
+            ->where('insurance_product_id', $productId)
             ->first();
 
-            $ownDamageComputations = InsuranceComputationRate::select(
+            $ownDamageComputations = InsuranceComputation::select(
                 'insurance_coverages.coverage_name',
-                'insurance_computation_rates.set_limit as ownDamageSetLimit',
-                'insurance_computation_rates.set_rate as ownDamageSetRate',
-                'insurance_computation_rates.provider_net_limit as ownDamageProviderLimit',
-                'insurance_computation_rates.provider_net_rate as ownDamageProviderRate',
+                'insurance_computations.set_limit as ownDamageSetLimit',
+                'insurance_computations.set_rate as ownDamageSetRate',
+                'insurance_computations.provider_net_limit as ownDamageProviderLimit',
+                'insurance_computations.provider_net_rate as ownDamageProviderRate',
 
             )
-            ->where('provider_category_id', $providerCategory->id)
+            ->where('provider_product_id', $providerProduct->id)
             ->where('insurance_coverages.coverage_name', '=', 'OWN DAMAGE/THEFT' )
-            ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computation_rates.insurance_coverage_id')
+            ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computations.insurance_coverage_id')
             ->get();
 
 
 
-            $bodilyInjuryComputations = InsuranceComputationRate::select(
+            $bodilyInjuryComputations = InsuranceComputation::select(
                 'insurance_coverages.coverage_name',
-                'insurance_computation_rates.set_limit as bodilyInjurySetLimit',
-                'insurance_computation_rates.set_rate as bodilyInjurySetRate',
-                'insurance_computation_rates.provider_net_limit as bodilyInjuryProviderLimit',
-                'insurance_computation_rates.provider_net_rate as bodilyInjuryProviderRate',
+                'insurance_computations.set_limit as bodilyInjurySetLimit',
+                'insurance_computations.set_rate as bodilyInjurySetRate',
+                'insurance_computations.provider_net_limit as bodilyInjuryProviderLimit',
+                'insurance_computations.provider_net_rate as bodilyInjuryProviderRate',
 
             )
-            ->where('provider_category_id', $providerCategory->id)
+            ->where('provider_product_id', $providerProduct->id)
             ->where('insurance_coverages.coverage_name', '=', 'BODILY INJURY' )
-            ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computation_rates.insurance_coverage_id')
+            ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computations.insurance_coverage_id')
             ->get();
 
 
-            $propertyDamageComputations = InsuranceComputationRate::select(
+            $propertyDamageComputations = InsuranceComputation::select(
                 'insurance_coverages.coverage_name',
-                'insurance_computation_rates.set_limit as propertyDamageSetLimit',
-                'insurance_computation_rates.set_rate as propertyDamageSetRate',
-                'insurance_computation_rates.provider_net_limit as propertyDamageLimit',
-                'insurance_computation_rates.provider_net_rate as propertyDamageProviderRate',
+                'insurance_computations.set_limit as propertyDamageSetLimit',
+                'insurance_computations.set_rate as propertyDamageSetRate',
+                'insurance_computations.provider_net_limit as propertyDamageLimit',
+                'insurance_computations.provider_net_rate as propertyDamageProviderRate',
             )
 
-            ->where('provider_category_id', $providerCategory->id)
+            ->where('provider_product_id', $providerProduct->id)
             ->where('insurance_coverages.coverage_name', '=', 'PROPERTY DAMAGE' )
-            ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computation_rates.insurance_coverage_id')
+            ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computations.insurance_coverage_id')
             ->get();
 
 
-            $autoPaComputations = InsuranceComputationRate::select(
+            $autoPaComputations = InsuranceComputation::select(
                 'insurance_coverages.coverage_name',
-                'insurance_computation_rates.set_limit as autoPaSetLimit',
+                'insurance_computations.set_limit as autoPaSetLimit',
             )
-            ->where('provider_category_id', $providerCategory->id)
-            ->where('insurance_coverages.coverage_name', '=', 'AUTO-PA- 5 SEATS' )
-            ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computation_rates.insurance_coverage_id')
+            ->where('provider_product_id', $providerProduct->id)
+            ->where('insurance_coverages.coverage_name', '=', 'AUTO-PA-5 SEATS' )
+            ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computations.insurance_coverage_id')
             ->get();
 
-            $aogComputations = InsuranceComputationRate::select(
+            $aogComputations = InsuranceComputation::select(
                 'insurance_coverages.coverage_name',
-                'insurance_computation_rates.set_limit as aogSetLimit',
-                'insurance_computation_rates.set_rate as aogSetRate',
-                'insurance_computation_rates.provider_net_limit as aogProviderLimit',
-                'insurance_computation_rates.provider_net_rate as aogProviderRate',
+                'insurance_computations.set_limit as aogSetLimit',
+                'insurance_computations.set_rate as aogSetRate',
+                'insurance_computations.provider_net_limit as aogProviderLimit',
+                'insurance_computations.provider_net_rate as aogProviderRate',
 
             )
-            ->where('provider_category_id', $providerCategory->id)
+            ->where('provider_product_id', $providerProduct->id)
             ->where('insurance_coverages.coverage_name', '=', 'AOG' )
-            ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computation_rates.insurance_coverage_id')
+            ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computations.insurance_coverage_id')
             ->get();
 
             // DD($autoPaComputations);
