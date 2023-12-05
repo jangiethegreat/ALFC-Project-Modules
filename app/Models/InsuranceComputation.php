@@ -13,10 +13,12 @@ class InsuranceComputation extends Model
     protected $fillable = [
         'provider_product_id',
         'insurance_coverage_id',
-        'set_limit',
-        'set_rate',
-        'provider_net_limit',
-        'provider_net_rate'
+        'set_limit_minimum',
+        'set_limit_maximum',
+        'set_rate_minimum',
+        'set_rate_maximum',
+        'provider_net_rate',
+        'comm_based'
     ];
 
     public $timestamp = false;

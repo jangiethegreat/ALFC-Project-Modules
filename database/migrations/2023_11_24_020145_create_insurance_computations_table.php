@@ -17,10 +17,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('provider_product_id')->constrained('provider_products');
             $table->foreignId('insurance_coverage_id')->constrained('insurance_coverages');
-            $table->decimal('set_limit', 20, 9);
-            $table->decimal('set_rate', 20, 9);
-            $table->decimal('provider_net_limit', 20, 9);
+            $table->decimal('set_limit_minimum', 20, 9);
+            $table->decimal('set_limit_maximum', 20, 9);
+            $table->decimal('set_rate_minimum', 20, 9);
+            $table->decimal('set_rate_maximum', 20, 9);
             $table->decimal('provider_net_rate', 20, 9);
+            $table->decimal('comm_based', 20, 9);
 
         });
     }

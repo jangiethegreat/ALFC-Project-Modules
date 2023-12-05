@@ -45,61 +45,38 @@ LOCK TABLES `failed_jobs` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `insurance_categories`
+-- Table structure for table `insurance_computations`
 --
 
-DROP TABLE IF EXISTS `insurance_categories`;
+DROP TABLE IF EXISTS `insurance_computations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `insurance_categories` (
+CREATE TABLE `insurance_computations` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `category_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `category_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `insurance_categories`
---
-
-LOCK TABLES `insurance_categories` WRITE;
-/*!40000 ALTER TABLE `insurance_categories` DISABLE KEYS */;
-INSERT INTO `insurance_categories` VALUES (1,'Sedan','Private Car'),(2,'Wagon','Private Car'),(3,'Truck','Private Car'),(4,'L300','Public Utility Vehicle');
-/*!40000 ALTER TABLE `insurance_categories` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `insurance_computation_rates`
---
-
-DROP TABLE IF EXISTS `insurance_computation_rates`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `insurance_computation_rates` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `provider_category_id` bigint unsigned NOT NULL,
+  `provider_product_id` bigint unsigned NOT NULL,
   `insurance_coverage_id` bigint unsigned NOT NULL,
-  `set_limit` decimal(20,9) NOT NULL,
-  `set_rate` decimal(20,9) NOT NULL,
-  `provider_net_limit` decimal(20,9) NOT NULL,
+  `set_limit_minimum` decimal(20,9) NOT NULL,
+  `set_limit_maximum` decimal(20,9) NOT NULL,
+  `set_rate_minimum` decimal(20,9) NOT NULL,
+  `set_rate_maximum` decimal(20,9) NOT NULL,
   `provider_net_rate` decimal(20,9) NOT NULL,
+  `comm_based` decimal(20,9) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `insurance_computation_rates_provider_category_id_foreign` (`provider_category_id`),
-  KEY `insurance_computation_rates_insurance_coverage_id_foreign` (`insurance_coverage_id`),
-  CONSTRAINT `insurance_computation_rates_insurance_coverage_id_foreign` FOREIGN KEY (`insurance_coverage_id`) REFERENCES `insurance_coverages` (`id`),
-  CONSTRAINT `insurance_computation_rates_provider_category_id_foreign` FOREIGN KEY (`provider_category_id`) REFERENCES `provider_categories` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `insurance_computations_provider_product_id_foreign` (`provider_product_id`),
+  KEY `insurance_computations_insurance_coverage_id_foreign` (`insurance_coverage_id`),
+  CONSTRAINT `insurance_computations_insurance_coverage_id_foreign` FOREIGN KEY (`insurance_coverage_id`) REFERENCES `insurance_coverages` (`id`),
+  CONSTRAINT `insurance_computations_provider_product_id_foreign` FOREIGN KEY (`provider_product_id`) REFERENCES `provider_products` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `insurance_computation_rates`
+-- Dumping data for table `insurance_computations`
 --
 
-LOCK TABLES `insurance_computation_rates` WRITE;
-/*!40000 ALTER TABLE `insurance_computation_rates` DISABLE KEYS */;
-INSERT INTO `insurance_computation_rates` VALUES (1,1,1,500000.000000000,0.017500000,800000.000000000,0.008500000),(2,1,2,50000.000000000,0.003900000,0.000000000,0.003900000),(3,1,2,75000.000000000,0.003000000,0.000000000,0.003000000),(4,1,2,100000.000000000,0.002700000,0.000000000,0.002700000),(5,1,2,150000.000000000,0.002300000,0.000000000,0.002300000),(6,1,2,200000.000000000,0.002100000,0.000000000,0.002100000),(7,1,2,250000.000000000,0.002040000,0.000000000,0.002040000),(8,1,2,300000.000000000,0.001950000,0.000000000,0.001950000),(9,1,2,400000.000000000,0.001687500,0.000000000,0.001687500),(10,1,2,500000.000000000,0.001560000,0.000000000,0.001560000),(11,1,2,750000.000000000,0.001220000,0.000000000,0.001220000),(12,1,2,1000000.000000000,0.001050000,0.000000000,0.001050000),(13,1,3,50000.000000000,0.019500000,0.000000000,0.019500000),(14,1,3,75000.000000000,0.013800000,0.000000000,0.013800000),(15,1,3,100000.000000000,0.010950000,0.000000000,0.010950000),(16,1,3,150000.000000000,0.007800000,0.000000000,0.007800000),(17,1,3,200000.000000000,0.006225000,0.000000000,0.006225000),(18,1,3,250000.000000000,0.005280000,0.000000000,0.005280000),(19,1,3,300000.000000000,0.004650000,0.000000000,0.004560000),(20,1,3,400000.000000000,0.003787500,0.000000000,0.003787500),(21,1,3,500000.000000000,0.003270000,0.000000000,0.003270000),(22,1,3,750000.000000000,0.002560000,0.000000000,0.002560000),(23,1,3,1000000.000000000,0.002235000,0.000000000,0.002235000),(24,1,4,50000.000000000,0.000000000,50000.000000000,0.000000000),(25,1,5,500000.000000000,0.017500000,800000.000000000,0.000500000);
-/*!40000 ALTER TABLE `insurance_computation_rates` ENABLE KEYS */;
+LOCK TABLES `insurance_computations` WRITE;
+/*!40000 ALTER TABLE `insurance_computations` DISABLE KEYS */;
+INSERT INTO `insurance_computations` VALUES (12,1,1,100000.000000000,2000000.000000000,0.010000000,0.017500000,0.008500000,0.000000000),(13,1,2,50000.000000000,50000.000000000,0.003900000,0.003900000,0.003900000,0.000000000),(14,1,2,75000.000000000,75000.000000000,0.003000000,0.003000000,0.003000000,0.000000000),(15,1,2,100000.000000000,100000.000000000,0.002700000,0.002700000,0.002700000,0.000000000),(16,1,2,400000.000000000,400000.000000000,0.001687500,0.001687500,0.001687500,0.000000000),(17,1,3,50000.000000000,50000.000000000,0.019500000,0.019500000,0.019500000,0.000000000),(18,1,3,75000.000000000,75000.000000000,0.013800000,0.013800000,0.013800000,0.000000000),(19,1,3,100000.000000000,100000.000000000,0.010950000,0.010950000,0.010950000,0.000000000),(20,1,3,400000.000000000,400000.000000000,0.003787500,0.003787500,0.003787500,0.000000000),(21,1,4,50000.000000000,50000.000000000,0.000000000,0.000000000,0.000000000,0.000000000),(22,1,5,500000.000000000,500000.000000000,0.005000000,0.005000000,0.005000000,0.000000000);
+/*!40000 ALTER TABLE `insurance_computations` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -122,8 +99,33 @@ CREATE TABLE `insurance_coverages` (
 
 LOCK TABLES `insurance_coverages` WRITE;
 /*!40000 ALTER TABLE `insurance_coverages` DISABLE KEYS */;
-INSERT INTO `insurance_coverages` VALUES (1,'OWN DAMAGE/THEFT'),(2,'BODILY INJURY'),(3,'PROPERTY DAMAGE'),(4,'AUTO-PA- 5 SEATS'),(5,'AOG');
+INSERT INTO `insurance_coverages` VALUES (1,'OWN DAMAGE/THEFT'),(2,'BODILY INJURY'),(3,'PROPERTY DAMAGE'),(4,'AUTO-PA-5 SEATS'),(5,'AOG');
 /*!40000 ALTER TABLE `insurance_coverages` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `insurance_products`
+--
+
+DROP TABLE IF EXISTS `insurance_products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `insurance_products` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `product_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `product_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `insurance_products`
+--
+
+LOCK TABLES `insurance_products` WRITE;
+/*!40000 ALTER TABLE `insurance_products` DISABLE KEYS */;
+INSERT INTO `insurance_products` VALUES (1,'Sedan','Private Car'),(2,'Wagon','Private Car'),(3,'Truck','Private Car'),(4,'L300','Public Utility Vehicle'),(5,'FPA','');
+/*!40000 ALTER TABLE `insurance_products` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -162,7 +164,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -171,7 +173,7 @@ CREATE TABLE `migrations` (
 
 LOCK TABLES `migrations` WRITE;
 /*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-INSERT INTO `migrations` VALUES (1,'2014_10_12_000000_create_users_table',1),(2,'2014_10_12_100000_create_password_resets_table',1),(3,'2019_08_19_000000_create_failed_jobs_table',1),(4,'2019_12_14_000001_create_personal_access_tokens_table',1),(5,'2023_11_24_011536_create_insurance_providers_table',1),(6,'2023_11_24_012544_create_insurance_categories_table',1),(7,'2023_11_24_012823_create_insurance_coverages_table',1),(8,'2023_11_24_013214_create_provider_categories_table',2),(9,'2023_11_24_020145_create_insurance_computation_rates_table',3),(10,'2023_11_24_034605_create_qoutations_table',4);
+INSERT INTO `migrations` VALUES (14,'2014_10_12_000000_create_users_table',1),(15,'2014_10_12_100000_create_password_resets_table',1),(16,'2019_08_19_000000_create_failed_jobs_table',1),(17,'2019_12_14_000001_create_personal_access_tokens_table',1),(18,'2023_11_24_011536_create_insurance_providers_table',1),(19,'2023_11_24_012544_create_insurance_products_table',1),(20,'2023_11_24_012823_create_insurance_coverages_table',1),(21,'2023_11_24_013214_create_provider_products_table',1),(22,'2023_11_24_020145_create_insurance_computations_table',1),(23,'2023_11_24_034605_create_qoutations_table',1);
 /*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -232,32 +234,33 @@ LOCK TABLES `personal_access_tokens` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `provider_categories`
+-- Table structure for table `provider_products`
 --
 
-DROP TABLE IF EXISTS `provider_categories`;
+DROP TABLE IF EXISTS `provider_products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `provider_categories` (
+CREATE TABLE `provider_products` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `insurance_provider_id` bigint unsigned NOT NULL,
-  `insurance_category_id` bigint unsigned NOT NULL,
+  `insurance_product_id` bigint unsigned NOT NULL,
+  `insurance_product_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `provider_categories_insurance_provider_id_foreign` (`insurance_provider_id`),
-  KEY `provider_categories_insurance_category_id_foreign` (`insurance_category_id`),
-  CONSTRAINT `provider_categories_insurance_category_id_foreign` FOREIGN KEY (`insurance_category_id`) REFERENCES `insurance_categories` (`id`),
-  CONSTRAINT `provider_categories_insurance_provider_id_foreign` FOREIGN KEY (`insurance_provider_id`) REFERENCES `insurance_providers` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `provider_products_insurance_provider_id_foreign` (`insurance_provider_id`),
+  KEY `provider_products_insurance_product_id_foreign` (`insurance_product_id`),
+  CONSTRAINT `provider_products_insurance_product_id_foreign` FOREIGN KEY (`insurance_product_id`) REFERENCES `insurance_products` (`id`),
+  CONSTRAINT `provider_products_insurance_provider_id_foreign` FOREIGN KEY (`insurance_provider_id`) REFERENCES `insurance_providers` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `provider_categories`
+-- Dumping data for table `provider_products`
 --
 
-LOCK TABLES `provider_categories` WRITE;
-/*!40000 ALTER TABLE `provider_categories` DISABLE KEYS */;
-INSERT INTO `provider_categories` VALUES (1,1,1),(2,1,2),(3,1,3),(4,1,4);
-/*!40000 ALTER TABLE `provider_categories` ENABLE KEYS */;
+LOCK TABLES `provider_products` WRITE;
+/*!40000 ALTER TABLE `provider_products` DISABLE KEYS */;
+INSERT INTO `provider_products` VALUES (1,1,1,'Rate'),(2,1,2,'Rate'),(3,1,3,'Rate'),(4,1,4,'Rate'),(5,1,5,'Commission Based');
+/*!40000 ALTER TABLE `provider_products` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -279,7 +282,7 @@ CREATE TABLE `qoutations` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `qoutations_computation_rate_id_foreign` (`computation_rate_id`),
-  CONSTRAINT `qoutations_computation_rate_id_foreign` FOREIGN KEY (`computation_rate_id`) REFERENCES `provider_categories` (`id`)
+  CONSTRAINT `qoutations_computation_rate_id_foreign` FOREIGN KEY (`computation_rate_id`) REFERENCES `provider_products` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -331,4 +334,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-28 17:28:40
+-- Dump completed on 2023-12-05  9:51:34

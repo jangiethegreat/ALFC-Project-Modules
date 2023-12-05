@@ -630,11 +630,17 @@
     <script>
 
         //Fetch the value of ownDamageSetLimit from the database
-        let ownDamageSetLimit = @json($ownDamageComputations->pluck('ownDamageSetLimit')->first());
+        let ownDamageSetLimitMinimum = @json($ownDamageComputations->pluck('ownDamageSetLimitMinimum')->first());
+        let ownDamageSetLimitMaximum = @json($ownDamageComputations->pluck('ownDamageSetLimitMaximum')->first());
 
         //Fetch the value of ownDamageSetRate from the database
-        let ownDamageSetRate = @json($ownDamageComputations->pluck('ownDamageSetRate')->first());
-        let ownDamageRate = ownDamageSetRate * 100; //Convert ownDamageSetRate to Decimal
+        // let ownDamageSetRate = @json($ownDamageComputations->pluck('ownDamageSetRate')->first());
+        // let ownDamageRate = ownDamageSetRate * 100; //Convert ownDamageSetRate to Decimal
+        let ownDamageSetRateMinimum = @json($ownDamageComputations->pluck('ownDamageSetRateMinimum')->first());
+        let ownDamageSetRateMaximum = @json($ownDamageComputations->pluck('ownDamageSetRateMaximum')->first());
+
+        let ownDamageRateMaximum = ownDamageSetRateMaximum * 100; //Convert ownDamageSetRate to Decimal
+        let ownDamageRateMinimum = ownDamageSetRateMinimum * 100; //Convert ownDamageSetRate to Decimal
 
         // Funtion for Own Damage Limit
         function validateOwnDamageLimit(input) {
@@ -642,32 +648,30 @@
             const formattedValue = numericValue.toLocaleString('en-US'); //Put comma in the value
 
             // Convert ownDamageSetLimit to a formatted string with specified fraction digits Ex. 500000.000000 to 500,000
-            const formattedOwnDamageLimit = parseFloat(ownDamageSetLimit).toLocaleString('en-US',
-            {
+            const formattedOwnDamageLimitMin = parseFloat(ownDamageSetLimitMinimum).toLocaleString('en-US', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            });
+
+            const formattedOwnDamageLimitMax = parseFloat(ownDamageSetLimitMaximum).toLocaleString('en-US', {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 2
             });
 
 
             //Check if numericValue is greater than ownDamageSetLimit
-            if (numericValue > ownDamageSetLimit) {
-
-                //Show error message after the condition is met
+            if (numericValue < ownDamageSetLimitMinimum || numericValue > ownDamageSetLimitMaximum) {
+                // Show error message after the condition is met
                 input.classList.add('is-invalid');
 
-                // Show an error message for rate exceeding the value of formattedOwnDamageLimit
-                document.querySelector('.odt-invalid-inputs').innerText = `Please enter a value less than or equal to ${formattedOwnDamageLimit}`;
-
-            }
-
-            else {
-
-                //Remove error message after clearing the inputted value
+                // Show an error message for value outside the range of formattedOwnDamageLimitMin and formattedOwnDamageLimitMax
+                document.querySelector('.odt-invalid-inputs').innerText = `Please enter a value between ${formattedOwnDamageLimitMin} and ${formattedOwnDamageLimitMax}`;
+            } else {
+                // Remove error message after clearing the inputted value or when within the range
                 input.classList.remove('is-invalid');
-
-                // Remove the error message for rate exceeding the value of formattedOwnDamageLimit
                 document.querySelector('.odt-invalid-inputs').innerText = '';
             }
+
             input.value = formattedValue;
         }
 
@@ -676,82 +680,74 @@
             let value = input.value.trim(); // Remove leading/trailing spaces in inputted value
             let parsedValue = parseFloat(value); // Parse the trimmed value to a floating-point number
 
-            // Convert ownDamageSetRate to a formatted string with specified digits Ex. 0.018(0.017500000) to  1.75
-            const formattedOwnDamageRate = parseFloat(ownDamageRate).toLocaleString('en-US');
+            // Convert the rate limits to formatted strings with specified digits
+            const formattedOwnDamageRateMin = parseFloat(ownDamageRateMinimum).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
 
-            //!isNaN function check if the parsedValue is really a number
+            const formattedOwnDamageRateMax = parseFloat(ownDamageRateMaximum).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            // Validate the input value
             if (!isNaN(parsedValue)) {
-
-                //Check if parsedValue is greater than formattedOwnDamageRate
-                if (parsedValue > formattedOwnDamageRate) {
-
-                    //Show error message after the condition is met
-                    input.classList.add('is-invalid');
-
-                    // Show an error message for rate exceeding the value of formattedOwnDamageRate
-                    document.querySelector('.odtrate-invalid-inputs').innerText = 'Please enter a value less than or equal to ' + formattedOwnDamageRate + '%';
-
-                } else {
-
-                    //Remove error message after clearing the inputted value
+                // Check if parsedValue is within the specified range
+                if (parsedValue >= ownDamageRateMinimum && parsedValue <= ownDamageRateMaximum) {
+                    // Remove error message if the value is within the specified range
                     input.classList.remove('is-invalid');
-
-                    // Remove the error message for rate exceeding the value of formattedOwnDamageLimit
                     document.querySelector('.odtrate-invalid-inputs').innerText = '';
+                } else {
+                    // Show error message for values outside the specified range
+                    input.classList.add('is-invalid');
+                    document.querySelector('.odtrate-invalid-inputs').innerText = `Please enter a value between ${formattedOwnDamageRateMin}% and ${formattedOwnDamageRateMax}%`;
                 }
-
-            } else if (value === ''){
-                // If parsedValue is empty (input field is empty)
+            } else if (value === '') {
                 // Remove error styling and message for empty input
                 input.classList.remove('is-invalid');
                 document.querySelector('.odtrate-invalid-inputs').innerText = '';
-
-            }
-
-            else {
-                //Show error message after the condition is met
+            } else {
+                // Show error message for invalid input
                 input.classList.add('is-invalid');
-
-                // Show an error message for invalid input
                 document.querySelector('.odtrate-invalid-inputs').innerText = 'Please enter only numeric values in this field.';
             }
         }
 
         // Funtion to convert the value of ODT from Decimal to Percent
         function convertToDecimalPercentageODT() {
-            let input = document.getElementById('odt_rate'); //get the inputted value
+            let input = document.getElementById('odt_rate'); // Get the input element
             let value = input.value.trim(); // Remove leading/trailing spaces
             let parsedValue = parseFloat(value);
 
-            //convert it to percentage
+            // Convert the value to a percentage if it's a valid number
             if (!isNaN(parsedValue)) {
-                let decimalValue = parsedValue / 100;
-                input.value = parsedValue + '%';
-                decimalValue.toFixed(4);
-                calculatePremiumDueODT(decimalValue);
+                let decimalValue = parsedValue / 100; // Convert to decimal
+                input.value = parsedValue + '%'; // Set the value with a percentage sign
+                calculatePremiumDueODT(decimalValue); // Calculate premium due based on the decimal value
             }
-
         }
 
-        //Calculate the Premium due of the Own Damage / Theft
         function calculatePremiumDueODT(decimalValue) {
-            let limit = parseFloat(document.getElementById('odt_limit').value.replace(/\D/g, ''));
+            let limit = parseFloat(document.getElementById('odt_limit').value.replace(/\D/g, '')); // Get and parse the limit
 
             if (!isNaN(limit) && !isNaN(decimalValue)) {
-                let premiumDue = (limit * decimalValue).toFixed(2);
-                document.getElementById('odt_premium_due').value = parseFloat(premiumDue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                updateTotalPremiumDue();
+                let premiumDue = (limit * decimalValue).toFixed(2); // Calculate the premium due
+                document.getElementById('odt_premium_due').value = parseFloat(premiumDue).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }); // Set the premium due value
+                updateTotalPremiumDue(); // Update the total premium due
             }
         }
 
-        //Show the Value of the premium due and put a percent sign in the rate when pressing enter
         document.getElementById('odt_rate').addEventListener('change', function (event) {
             validateOwnDamageRate(this); // Check the rate validity
             let value = this.value.trim(); // Remove leading/trailing spaces
             let parsedValue = parseFloat(value);
 
             if (!isNaN(parsedValue) && parsedValue <= ownDamageRate) {
-                convertToDecimalPercentageODT();
+                convertToDecimalPercentageODT(); // If valid and within limit, convert to decimal percentage
             }
         });
 
@@ -854,7 +850,7 @@
     </script>
 
     {{-- AOG Functions --}}
-    <script>
+    {{-- <script>
 
         //Fetch the value of ownDamageSetLimit from the database
         let aogSetLimit = @json($aogComputations->pluck('aogSetLimit')->first());
@@ -958,7 +954,7 @@
             }
 
         });
-    </script>
+    </script> --}}
 
 
 
@@ -1019,7 +1015,7 @@
 
         }
     </script>
-
+    
     <script>
 
         function calculateLGT()
@@ -1077,7 +1073,7 @@
 
             totalvalueNet = totalGrossPremium - totalDiscount ;
 
-            // document.querySelector('net').
+            document.querySelector('net').
 
             document.getElementById('net').value = totalvalueNet.toLocaleString('en-US', {
                 minimumFractionDigits: 2,

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('insurance_provider_id')->constrained('insurance_providers');
             $table->foreignId('insurance_product_id')->constrained('insurance_products');
+            $table->string('insurance_product_type');
         });
     }
 

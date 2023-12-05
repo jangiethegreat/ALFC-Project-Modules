@@ -12,7 +12,8 @@ class ProviderProduct extends Model
 
     protected $fillable = [
         'insurance_provider_id',
-        'insurance_product_id'
+        'insurance_product_id',
+        'insurance_product_type'
     ];
 
     public $timestamp = false;
