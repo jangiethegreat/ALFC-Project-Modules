@@ -232,7 +232,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-6 col-sm-3 col-md-3 mb-3 d-flex flex-column align-items-center">
+                                <div class="col-sm-3 col-md-3 mb-3 d-flex flex-column align-items-center">
                                     <label class="text-card input-label label">PREMIUM DUE</label>
                                     <input type="text" id="odt_premium_due" name="odt_premium_due" class="form-control custom-input"  readonly>
                                 </div>
@@ -266,7 +266,7 @@
 
                                 </div>
 
-                                <div class="col-6 col-sm-3 col-md-3  mb-3 d-flex flex-column align-items-center">
+                                <div class="col-sm-3 col-md-3  mb-3 d-flex flex-column align-items-center">
                                     <label class="text-card input-label label hidden-mobile" style="visibility: hidden;">PREMIUM DUE</label>
                                     <input type="text" id="bi_premium_due" name="bi_premium_due" class="form-control custom-input" readonly>
                                 </div>
@@ -298,7 +298,7 @@
                                     <input type="text" class="form-control custom-input" disabled>
                                 </div>
 
-                                <div class="col-6 col-sm-3 col-md-3  mb-3 d-flex flex-column align-items-center" >
+                                <div class="col-sm-3 col-md-3  mb-3 d-flex flex-column align-items-center" >
                                     <label class="text-card input-label label hidden-mobile" style="visibility: hidden;">PREMIUM DUE</label>
                                     <input type="text" id="pd_premium_due" name="pd_premium_due" class="form-control custom-input" readonly>
                                 </div>
@@ -321,7 +321,7 @@
 
                                 </div>
 
-                                <div class="col-6 col-sm-3 col-md-3  mb-3 d-flex flex-column align-items-center">
+                                <div class="col-sm-3 col-md-3  mb-3 d-flex flex-column align-items-center">
                                     <label class="text-card input-label label hidden-mobile" style="visibility: hidden;">PREMIUM DUE</label>
                                     <input type="text" id="aps_premium_due" name="aps_premium_due" class="form-control custom-input" readonly>
 
@@ -337,17 +337,20 @@
 
                                 <div class="col-6 col-sm-3 col-md-3  mb-3 d-flex flex-column align-items-center form-floating">
                                     <label class="text-card input-label label hidden-mobile" style="visibility: hidden;">LIMIT</label>
-                                    <input type="text" id="aog_limit" name="aog_limit" class="form-control custom-input"  oninput="validateAogLimit(this)">
+                                    <input type="text" id="aog_limit" name="aog_limit" class="form-control custom-input"  >
                                     <div class="invalid-inputs aog-invalid-inputs"></div>
                                 </div>
 
 
-                                <div class="col-6 col-sm-3 col-md-3 mb-3 d-flex flex-column align-items-center" >
+                                <div class="col-6 col-sm-3 col-md-3 mb-3 d-flex flex-column align-items-center">
                                     <label class="text-card input-label label hidden-mobile" style="visibility: hidden;">RATE</label>
-                                    <input type="text" id="aog_rate" name="aog_rate" class="form-control custom-input" oninput="validateAogRate(this)">
+                                    <input type="text" id="aog_rate" name="aog_rate" class="form-control custom-input"
+                                        value="{{ $aogComputations->isNotEmpty() ? $aogComputations->first()->aogProviderRate : '' }}">
                                     <div class="invalid-inputs aograte-invalid-inputs"></div>
                                 </div>
-                                <div class="col-6 col-sm-3 col-md-3 d-flex flex-column align-items-center" >
+
+                                                                                                                                
+                                <div class="col-sm-3 col-md-3 d-flex flex-column align-items-center" >
                                     <label class="text-card input-label label hidden-mobile" style="visibility: hidden;">PREMIUM DUE</label>
                                     <input type="text" id="aog_premium_due" name="aog_premium_due" class="form-control custom-input" readonly>
 
@@ -402,10 +405,19 @@
 
                                 <div class="col-6 col-sm-3 col-md-3 mb-3 d-flex flex-column align-items-center">
                                 </div>
-                                <div class="col-sm-3 col-md-3 mb-3 d-flex flex-column align-items-center" >
-                                    <label class="text-card input-label label">LGT</label>
-                                    <input type="text" id="lgt" name="lgt" class="form-control custom-input" >
+                                <div class="col-sm-3 col-md-3 mb-3 d-flex flex-column align-items-center">
+                                    <label class="input-label label">LGT </label>
+                                    <select id="lgtSelect" class="form-control custom-input" style="text-align: left; font-size: 13px;" onchange="replaceWithInput()">
+                                        <option disabled="disabled" selected="selected">Select LGT percentage</option>
+                                        <option value="0.002">NCR - 0.20%</option>
+                                        <option value="0.005">Luzon - 0.50%</option>
+                                        <option value="0.0075">Visayas - 0.75%</option>
+                                        <option value="0.00825">Mindanao - 0.825%</option>
+                                    </select>
+                                    <input type="text" id="lgtInput" name="lgt" class="form-control custom-input" style="display: none;" onclick="resetLGTSelect()">
                                 </div>
+
+
                                 <div class="col-sm-3 col-md-3 mb-3 d-flex flex-column align-items-center" >
                                     <label class="text-card input-label label">GROSS PREMIUM</label>
                                     <input type="text" id="gross_premium" name="gross_premium" class="form-control custom-input" readonly>
@@ -437,7 +449,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6 order-1 order-md-0">
+                                <div class="col-md-5 order-1 order-md-0">
                                     <div class="card border-0">
                                         <div class="card-body">
                                             <div class="row row-space">
@@ -484,19 +496,32 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6 order-0 order-md-1">
+                                <div class="col-md-7 order-0 order-md-1">
                                     <div class="card border-0">
                                         <div class="card-body" id="dynamicFieldsContainer">
                                             <div class="row row-space" id="initialInputs">
-                                                <div class="col-6 col-sm-3 col-md-6 d-flex flex-column align-items-center">
+                                                
+                                                <div class="col-6 col-sm-3 col-md-3 d-flex flex-column align-items-center">
+                                                    <label class="input-label label">Titles</label>
+                                                    <select id="title" class="form-control custom-input" style="text-align: left; font-size: 13px;" >
+                                                        <option disabled="disabled" selected="selected"></option>
+                                                        <option value="BM">BM</option>
+                                                        <option value="GM">GM</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-6 col-sm-3 col-md-5 d-flex flex-column align-items-center">
                                                     <label class="input-label label">Deductions</label>
                                                     <input type="text" class="form-control custom-input" >
                                                 </div>
-                                                <div class="col-6 col-sm-3 col-md-6 d-flex flex-column align-items-center">
+
+                                                <div class="col-6 col-sm-3 col-md-4 d-flex flex-column align-items-center">
                                                     <label class="input-label label">Amount</label>
                                                     <input type="text" class="form-control custom-input" >
                                                 </div>
+
                                             </div>
+
                                             <div class="row mt-3">
                                                 <div class="col-md-12 text-right">
                                                     <button class="btn-remove" id="deleteFieldBtn" disabled>
@@ -583,19 +608,31 @@
 
             document.getElementById('addFieldBtn').addEventListener('click', function () {
                 event.preventDefault();
+
                 let newFieldsContainer = document.createElement('div');
                 newFieldsContainer.className = 'row row-space';
 
                 let newField1 = document.createElement('div');
-                newField1.className = 'col-6 col-sm-3 col-md-6 mb-3 d-flex align-items-center justify-content-center';
-                newField1.innerHTML = '<input type="text" class="form-control custom-input" >';
+                newField1.className = 'col-6 col-sm-3 col-md-3 mb-3 d-flex flex-column align-items-center';
+                newField1.innerHTML = `
+                    <select class="form-control custom-input" style="text-align: left; font-size: 13px;">
+                        <option disabled="disabled" selected="selected"></option>
+                        <option value="BM">BM</option>
+                        <option value="GM">GM</option>
+                    </select>
+                `;
 
                 let newField2 = document.createElement('div');
-                newField2.className = 'col-6 col-sm-3 col-md-6 mb-3 d-flex align-items-center justify-content-center';
-                newField2.innerHTML = '<input type="text" class="form-control custom-input" >';
+                newField2.className = 'col-6 col-sm-3 col-md-5 mb-3 d-flex flex-column align-items-center';
+                newField2.innerHTML = '<input type="text" class="form-control custom-input">';
+
+                let newField3 = document.createElement('div');
+                newField3.className = 'col-6 col-sm-3 col-md-4 mb-3 d-flex flex-column align-items-center';
+                newField3.innerHTML = '<input type="text" class="form-control custom-input">';
 
                 newFieldsContainer.appendChild(newField1);
                 newFieldsContainer.appendChild(newField2);
+                newFieldsContainer.appendChild(newField3);
 
                 let addButton = document.getElementById('addFieldBtn');
                 addButton.parentNode.insertBefore(newFieldsContainer, addButton.parentNode.firstChild);
@@ -626,6 +663,7 @@
     </script>
 
 
+
     {{--Own Damage Function --}}
     <script>
 
@@ -642,11 +680,15 @@
         let ownDamageRateMaximum = ownDamageSetRateMaximum * 100; //Convert ownDamageSetRate to Decimal
         let ownDamageRateMinimum = ownDamageSetRateMinimum * 100; //Convert ownDamageSetRate to Decimal
 
+        
+
         // Funtion for Own Damage Limit
         function validateOwnDamageLimit(input) {
             const numericValue = Number(input.value.replace(/[^\d.]/g, '')); // Retrieve the value from an HTML input element and remove any non-numeric characters
             const formattedValue = numericValue.toLocaleString('en-US'); //Put comma in the value
-
+            
+            const odtRateInput = document.getElementById('odt_rate');
+            const odtRateLabel = document.querySelector('.odtrate-invalid-inputs');
             // Convert ownDamageSetLimit to a formatted string with specified fraction digits Ex. 500000.000000 to 500,000
             const formattedOwnDamageLimitMin = parseFloat(ownDamageSetLimitMinimum).toLocaleString('en-US', {
                 minimumFractionDigits: 0,
@@ -661,15 +703,21 @@
 
             //Check if numericValue is greater than ownDamageSetLimit
             if (numericValue < ownDamageSetLimitMinimum || numericValue > ownDamageSetLimitMaximum) {
+                
                 // Show error message after the condition is met
                 input.classList.add('is-invalid');
 
                 // Show an error message for value outside the range of formattedOwnDamageLimitMin and formattedOwnDamageLimitMax
                 document.querySelector('.odt-invalid-inputs').innerText = `Please enter a value between ${formattedOwnDamageLimitMin} and ${formattedOwnDamageLimitMax}`;
+                odtRateInput.disabled = true;
+                odtRateLabel.innerText = 'Rate input is disabled due to an invalid limit.';
+
             } else {
                 // Remove error message after clearing the inputted value or when within the range
                 input.classList.remove('is-invalid');
                 document.querySelector('.odt-invalid-inputs').innerText = '';
+                odtRateInput.disabled = false;
+                odtRateLabel.innerText = '';
             }
 
             input.value = formattedValue;
@@ -702,6 +750,7 @@
                     // Show error message for values outside the specified range
                     input.classList.add('is-invalid');
                     document.querySelector('.odtrate-invalid-inputs').innerText = `Please enter a value between ${formattedOwnDamageRateMin}% and ${formattedOwnDamageRateMax}%`;
+
                 }
             } else if (value === '') {
                 // Remove error styling and message for empty input
@@ -712,46 +761,52 @@
                 input.classList.add('is-invalid');
                 document.querySelector('.odtrate-invalid-inputs').innerText = 'Please enter only numeric values in this field.';
             }
+            
+
         }
 
         // Funtion to convert the value of ODT from Decimal to Percent
         function convertToDecimalPercentageODT() {
-            let input = document.getElementById('odt_rate'); // Get the input element
-            let value = input.value.trim(); // Remove leading/trailing spaces
+            let input = document.getElementById('odt_rate');
+            let value = input.value.trim();
             let parsedValue = parseFloat(value);
 
-            // Convert the value to a percentage if it's a valid number
             if (!isNaN(parsedValue)) {
-                let decimalValue = parsedValue / 100; // Convert to decimal
-                input.value = parsedValue + '%'; // Set the value with a percentage sign
-                calculatePremiumDueODT(decimalValue); // Calculate premium due based on the decimal value
+                let decimalValue = parsedValue / 100;
+                input.value = parsedValue + '%';
+                decimalValue.toFixed(4);
+                console.log(parsedValue);
+                calculatePremiumDueODT(decimalValue);
             }
         }
 
         function calculatePremiumDueODT(decimalValue) {
-            let limit = parseFloat(document.getElementById('odt_limit').value.replace(/\D/g, '')); // Get and parse the limit
+            let limit = parseFloat(document.getElementById('odt_limit').value.replace(/\D/g, ''));
 
             if (!isNaN(limit) && !isNaN(decimalValue)) {
-                let premiumDue = (limit * decimalValue).toFixed(2); // Calculate the premium due
+                let premiumDue = (limit * decimalValue).toFixed(2);
                 document.getElementById('odt_premium_due').value = parseFloat(premiumDue).toLocaleString('en-US', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2
-                }); // Set the premium due value
-                updateTotalPremiumDue(); // Update the total premium due
+                });
+                updateTotalPremiumDue();
             }
         }
 
         document.getElementById('odt_rate').addEventListener('change', function (event) {
-            validateOwnDamageRate(this); // Check the rate validity
-            let value = this.value.trim(); // Remove leading/trailing spaces
+            validateOwnDamageRate(this);
+            let value = this.value.trim();
             let parsedValue = parseFloat(value);
 
-            if (!isNaN(parsedValue) && parsedValue <= ownDamageRate) {
-                convertToDecimalPercentageODT(); // If valid and within limit, convert to decimal percentage
+            if (!isNaN(parsedValue) && parsedValue <= ownDamageRateMaximum || parsedValue >= ownDamageRateMinimum) {
+                convertToDecimalPercentageODT();
             }
         });
 
     </script>
+        
+
+   
 
     {{--Bodily Injury Function --}}
     <script>
@@ -850,11 +905,80 @@
     </script>
 
     {{-- AOG Functions --}}
-    {{-- <script>
+
+    <script>
+        
+        let odtLimitInput = document.getElementById('odt_limit');
+        let aogLimitInput = document.getElementById('aog_limit');
+
+        function passValueToAOGLimit() {
+            let odtLimitValue = odtLimitInput.value.trim();
+            if (!odtLimitInput.classList.contains('is-invalid')) {
+
+                aogLimitInput.value = odtLimitValue;
+                calculatePremiumDueAOG(); 
+                // Call the conversion function when odt_limit changes
+            }
+            else {
+                aogLimitInput.value = "";
+                clearAll();
+            }
+            
+        }
+
+        // Event listener to detect changes in odt_limit and pass its value to aog_limit
+        odtLimitInput.addEventListener('change', passValueToAOGLimit);
+        odtLimitInput.addEventListener('input', passValueToAOGLimit);
+
+        window.addEventListener('DOMContentLoaded', (event) => {
+            convertToPercentageWithSign();
+            // console.log(aog_rate.value);
+        });
+
+        function convertToPercentageWithSign() {
+            let input = document.getElementById('aog_rate');
+            let value = input.value.trim();
+            let parsedValue = parseFloat(value);
+
+            // Convert to percentage and add '%' sign
+            if (!isNaN(parsedValue)) {
+                let percentageValue = (parsedValue * 100).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 4
+                });
+
+                input.value = percentageValue + '%';           
+            }
+        }
+
+        //Calculate the Premium due of the Own Damage / Theft
+        function calculatePremiumDueAOG() {
+            let limit = parseFloat(document.getElementById('aog_limit').value.replace(/\D/g, ''));
+            let rate = parseFloat(document.getElementById('aog_rate').value);
+
+            percentageRate = rate / 100;
+                
+
+                console.log(percentageRate);
+            if (!isNaN(limit) && !isNaN(percentageRate)) {
+                let premiumDue = (limit * percentageRate).toFixed(2);
+                document.getElementById('aog_premium_due').value = parseFloat(premiumDue).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+                updateTotalPremiumDue();
+            }
+        }
+            
+
+
+    </script>
+
+    <!-- <script>
 
         //Fetch the value of ownDamageSetLimit from the database
-        let aogSetLimit = @json($aogComputations->pluck('aogSetLimit')->first());
-        let aogSetRate = @json($aogComputations->pluck('aogSetRate')->first());
+  
+        let aogSetRate = @json($aogComputations->pluck('aogProviderRate')->first());
         let aogRate = aogSetRate * 100; //Convert ownDamageSetRate to Decimal
 
 
@@ -954,7 +1078,7 @@
             }
 
         });
-    </script> --}}
+    </script>  -->
 
 
 
@@ -1016,7 +1140,7 @@
         }
     </script>
     
-    <script>
+    <!-- <script>
 
         function calculateLGT()
         {
@@ -1031,6 +1155,47 @@
             });
 
         }
+    </script> -->
+
+
+    <script>
+    // Function to replace the select with an input when a value is chosen
+        function replaceWithInput() {
+            const select = document.getElementById('lgtSelect');
+            const selectedValue = select.options[select.selectedIndex].value;
+
+            // Call calculateLGT with the selected value
+            calculateLGT(selectedValue);
+
+            // Hide the select and display the input in the same position
+            document.getElementById('lgtSelect').style.display = 'none';
+            document.getElementById('lgtInput').style.display = 'block';
+            calculateGrossPremium()
+        }
+
+        // Function to calculate LGT based on the selected value
+        function calculateLGT(selectedValue) {
+            console.log("calculateLGT called");
+            console.log("Selected value:", selectedValue);
+
+            const totalPremiumDue = parseFloat(document.getElementById('net_premium_due').value.replace(/[^\d.]/g, '')) || 0;
+
+            console.log("Total Premium Due:", totalPremiumDue);
+
+            // Calculate total LGT based on the selected percentage
+            const totalLGT = totalPremiumDue * parseFloat(selectedValue);
+
+            console.log("Total LGT:", totalLGT);
+
+            // Display the calculated LGT in the input field
+            document.getElementById('lgtInput').value = totalLGT.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        // Set focus on the select element on page load
+
     </script>
 
 
@@ -1041,7 +1206,7 @@
             const totalPremiumDue = parseFloat(document.getElementById('net_premium_due').value.replace(/[^\d.]/g, '')) || 0;
             const totalDst = parseFloat(document.getElementById('dst').value.replace(/[^\d.]/g, '')) || 0;
             const totalVat = parseFloat(document.getElementById('vat').value.replace(/[^\d.]/g, '')) || 0;
-            const totalLgt = parseFloat(document.getElementById('lgt').value.replace(/[^\d.]/g, '')) || 0;
+            const totalLgt = parseFloat(document.getElementById('lgtInput').value.replace(/[^\d.]/g, '')) || 0;
             const totalRap = parseFloat(document.getElementById('rap').value.replace(/[^\d.]/g, '')) || 0;
 
             // const totalDst = parseFloat(document.getElementById('dst').split(',').join(''));
@@ -1073,8 +1238,7 @@
 
             totalvalueNet = totalGrossPremium - totalDiscount ;
 
-            document.querySelector('net').
-
+         
             document.getElementById('net').value = totalvalueNet.toLocaleString('en-US', {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
@@ -1083,6 +1247,42 @@
 
 
         }
+    </script>
+
+
+<script>
+
+        let odtPremiumDue = document.getElementById('odt_premium_due');
+        let odtRate = document.getElementById('odt_rate');
+        let lgtSelect = document.getElementById('lgtSelect');
+        let lgtInput = document.getElementById('lgtInput');
+
+        let aogPremiumDue = document.getElementById('aog_premium_due');
+        let netPremiumDue = document.getElementById('net_premium_due');
+        let dstInput = document.getElementById('dst');
+        let vatInput = document.getElementById('vat');
+        let grossInput = document.getElementById('gross_premium');
+
+        function resetLGTSelect() {
+        document.getElementById('lgtSelect').style.display = 'block';
+        document.getElementById('lgtInput').style.display = 'none';
+        document.getElementById('lgtInput').value = "";
+        document.getElementById('lgtSelect').selectedIndex = 0;
+        // Add any additional logic here to reset the state of lgtSelect if needed
+        }
+
+        function clearAll(){
+
+            odtPremiumDue.value = "";
+            odtRate.value = "";
+            aogPremiumDue.value = "";
+            netPremiumDue.value = "";
+            dstInput.value = "";
+            vatInput.value = "";
+            grossInput.value = "";
+            resetLGTSelect();
+        }
+
     </script>
 
 

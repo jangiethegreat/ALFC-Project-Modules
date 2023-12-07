@@ -140,17 +140,17 @@ class InsuranceProviderController extends Controller
             ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computations.insurance_coverage_id')
             ->get();
 
-            // $aogComputations = InsuranceComputation::select(
-            //     'insurance_coverages.coverage_name',
-            //     'insurance_computations.set_limit as aogSetLimit',
-            //     'insurance_computations.set_rate as aogSetRate',
-            //     'insurance_computations.provider_net_rate as aogProviderRate',
+            $aogComputations = InsuranceComputation::select(
+                'insurance_coverages.coverage_name',
+                'insurance_computations.provider_net_rate as aogProviderRate',
 
-            // )
-            // ->where('provider_product_id', $providerProduct->id)
-            // ->where('insurance_coverages.coverage_name', '=', 'AOG' )
-            // ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computations.insurance_coverage_id')
-            // ->get();
+            )
+            ->where('provider_product_id', $providerProduct->id)
+            ->where('insurance_coverages.coverage_name', '=', 'AOG' )
+            ->join('insurance_coverages', 'insurance_coverages.id', '=', 'insurance_computations.insurance_coverage_id')
+            ->get();
+
+            $aogRate = $aogComputations->isEmpty() ? null : $aogComputations[0]->aogProviderRate;
 
             // DD($autoPaComputations);
 
@@ -159,7 +159,7 @@ class InsuranceProviderController extends Controller
                 'bodilyInjuryComputations',
                 'propertyDamageComputations',
                 'autoPaComputations',
-                // 'aogComputations'
+                'aogComputations'
             ));
 
     }
